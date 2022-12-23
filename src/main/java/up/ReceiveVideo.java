@@ -16,9 +16,12 @@ import java.util.Base64;
 import org.atsign.common.Keys.SharedKey;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
-//import static up.constants.*;
+import static up.constants.*;
 
-
+/**
+ * the RECEIVE VIDEO CLASS - contains the two ReceiveVideo methods that open the atClient key instance and constantly pulls the string from the atserver and converts to video
+ * @author Thieu Nguyen, Matt Glover
+ */
 public class ReceiveVideo extends AtException implements Runnable{
     JLabel label;
     Keys.AtKey key;
@@ -29,6 +32,12 @@ public class ReceiveVideo extends AtException implements Runnable{
     boolean publicKey;
     PublicKey pk;
     SharedKey sk;   
+
+    /**
+     * 
+     * @param theirAt AtSign of the Sender (Atsign of receiver not needed because we are accessing the public key)
+     * @param pk the public Key 
+     */
     public ReceiveVideo(String  theirAt, String pk){
         super("atsign exception");
         this.atSign = new AtSign(theirAt);
@@ -50,6 +59,12 @@ public class ReceiveVideo extends AtException implements Runnable{
         this.frame = new JFrame();
         prev = null;
     }
+    /**
+     * 
+     * @param me String of the user's Atsign 
+     * @param sharedby String of the Atsign whom is sharing the video
+     * @param sk string of the password created by the sharer to access their Atserver
+     */
     public ReceiveVideo(String me, String sharedby, String sk){
         super("atsign exception");
         this.atSign = new AtSign(me);
@@ -70,7 +85,9 @@ public class ReceiveVideo extends AtException implements Runnable{
         prev = null;
 
     }
-
+    /**
+     * Run method that is triggered by the 2 ReceiveVideo methods - the while loop constantly pulls the new video string, converts to byte, and then displayed on a JFrame.
+     */
     public void run(){
         while (true){
             try {
@@ -108,6 +125,11 @@ public class ReceiveVideo extends AtException implements Runnable{
             }
         }
     }
+
+    /**
+     * Main method for testing. 
+     * @param args
+     */
     public static void main( String[] args )
     {
 

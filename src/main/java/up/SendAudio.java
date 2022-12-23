@@ -16,6 +16,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
 import static up.constants.*;
+/**
+ * SEND AUDIO CLASS - contains the public/shared key SendAudio methods which convert recorded audio into a string sent to the user's atServer.
+ * @author Thieu Nguyen
+ */
 class sendAudio extends AtException implements Runnable{
     AtClient atClient;
     Keys.AtKey key;
@@ -25,6 +29,11 @@ class sendAudio extends AtException implements Runnable{
     AtSign atSign, SHARED_WITH;
     String s;
     TargetDataLine targetDataLine;
+    /**
+     *  Send Audio method for public keys
+     * @param me String of your AtSign
+     * @param pk String of the public key
+     */
     public sendAudio(String me, String pk){
         super("atsign exception");
         this.atSign = new AtSign(me);
@@ -47,6 +56,12 @@ class sendAudio extends AtException implements Runnable{
             e.printStackTrace();
         }
     }
+    /**
+     * Send Audio method for sharedkey
+     * @param myAt string of your Atsign
+     * @param theirAt String of the AtSign you wish to send audio to
+     * @param sk string of the sharedkey password you create
+     */
     public sendAudio(String myAt, String theirAt, String sk){
         super("atsign exception");
         this.atSign = new AtSign(myAt);
@@ -62,8 +77,11 @@ class sendAudio extends AtException implements Runnable{
             e.printStackTrace();
             System.out.println("Could not get to atclient");
         }
+        /**
+         * audio device opened below
+         */
         try {
-            this.targetDataLine = (TargetDataLine) AudioSystem.getLine(TargetDataLineInfo);
+            this.targetDataLine = (TargetDataLine) AudioSystem.getLine(TargetDataLineInfo); 
             this.targetDataLine.open(format);
             this.targetDataLine.start();
         }
@@ -71,13 +89,20 @@ class sendAudio extends AtException implements Runnable{
             e.printStackTrace();
         }
     }
+    /**
+     * Runnable method triggered by the start() command in the SendAudio methods
+     * constantly converts audio bytes into a string and sends it to the Atserver with the specified key
+     */
     public void run() {
         while (true){
             try{
-                byte[] bytebuffer = new byte[20000];
-                this.targetDataLine.read(bytebuffer, 0, bytebuffer.length);
+                byte[] bytebuffer = new byte[20000]; 
+                this.targetDataLine.read(bytebuffer, 0, bytebuffer.length); //converts the audio into a byte array
                 System.out.println(bytebuffer);
-                this.s = Base64.getEncoder().encodeToString(bytebuffer);
+                this.s = Base64.getEncoder().encodeToString(bytebuffer); // converts byte array to string
+                /**
+                 * pushes string to the AtServer's key destination
+                 */
                 if (this.publicKey){
                     atClient.put(this.pk, s);
 
@@ -97,7 +122,10 @@ class sendAudio extends AtException implements Runnable{
     }
 
 
- 
+ /**
+  * Main method for testing - includes an example instance
+  * @param args
+  */
     public static void main( String[] args )
     {
         

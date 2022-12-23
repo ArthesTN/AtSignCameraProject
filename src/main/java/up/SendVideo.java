@@ -10,6 +10,11 @@ import org.atsign.common.Keys.SharedKey;
 import java.util.Base64;
 import org.atsign.client.util.ImageUtil;
 import com.github.sarxos.webcam.Webcam;
+
+/**
+ * SEND VIDEO CLASS - contains methods for taking the two atsigns plus key, then pushese the captured video to the atserver.
+ * @author Theiu, Matt Glover
+ */
 public class SendVideo extends AtException implements Runnable{
     AtClient atClient;
     Keys.AtKey key;
@@ -19,6 +24,14 @@ public class SendVideo extends AtException implements Runnable{
     boolean publicKey;
     PublicKey pk;
     SharedKey sk;
+    /**
+     * Send Video method for public keys
+     * Creates the atclient instance with the key, then opens the default camera to capture an image as bytes
+     * The start() function triggers the run method which constantly uploads the byte/converted string to the Atserver
+     * @param me String of Your Atsign
+     * @param pk String of the public Key 
+     * @author Thieu Nguyen, Matt Glover
+     */
     public SendVideo (String me, String pk){
         super("atsign exception");
  
@@ -37,6 +50,14 @@ public class SendVideo extends AtException implements Runnable{
         
 
     }
+    /**
+     *  Send Video method for shared keys
+     * Creates the atclient instance with the key, then opens the default camera to capture an image as bytes
+     * The start() function triggers the run method which constantly uploads the byte/converted string to the Atserver
+     * @param me String of your Atsign
+     * @param you String of the Atsign you wish to receive the stream
+     * @param sk the sharedkey string you create
+     */
     public SendVideo (String me, String you, String sk){
         super("atsign exception");
         this.atSign = new AtSign(me);
@@ -52,14 +73,18 @@ public class SendVideo extends AtException implements Runnable{
             System.out.println("Could not get to atclient");
         }
     }
+    /**
+     * Runnable method triggered by the SendVideo methods
+     * Constantly takes the streamed image byte, converts it to a string, then pushes it to the AtServer's key instance.
+     */
     public void run() {
         while (true){
             try{
 
-            byte[] byteArray = ImageUtil.toByteArray(CameraUtil.getSingleImage());
-            this.s = Base64.getEncoder().encodeToString(byteArray);
+            byte[] byteArray = ImageUtil.toByteArray(CameraUtil.getSingleImage()); // bytes of the streamed image
+            this.s = Base64.getEncoder().encodeToString(byteArray); // string of converted byte
             if (this.publicKey){
-                atClient.put(this.pk, s);
+                atClient.put(this.pk, s); 
             }
             else {
                 atClient.put(this.sk, s);

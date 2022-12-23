@@ -1,16 +1,50 @@
 package up;
 import javax.swing.*;
 import java.awt.event.*;
-import up.ReceiveAudio;
+import up.*;
+
+/**
+ * LAUNCH PAGE FOR PROGRAM
+ * 4 Buttons in total - Send/Receive Video or Audio - 2 Textfields for AtSigns, plus a checkbox to toggle publickey sharing.
+ * @author Matt Glover
+ */
 public class LaunchPage implements ActionListener {
-   
+   // Creates teh JFrame with the 4 options (send/receive video or audio), the public key toggle, and the textfeilds to type in the ATSigns and the key
     JFrame frame = new JFrame();
-    JButton sAButton = new JButton("Send Audio");
-    JButton rAButton = new JButton("Receive Audio");
-    JButton sButton = new JButton("Send Stream");
-    JButton rButton = new JButton("View Stream");
-    ImageIcon image = new ImageIcon();
-    public JTextField atMe, atTheirs, key;
+    /**
+     * Send Audio Button
+     */
+    public JButton sAButton = new JButton("Send Audio");   
+   
+    /*
+    * Receive Audio Button
+    */
+    public JButton rAButton = new JButton("Receive Audio");
+    
+    /**
+     * Send Video Button
+     */
+     public JButton sButton = new JButton("Send Stream");
+     
+     /**
+     * Receive Video Button
+     */
+     public JButton rButton = new JButton("View Stream");
+   
+     ImageIcon image = new ImageIcon(); // holds the background image
+
+    /**
+     * Your AtSign
+     */
+    public JTextField atMe;
+     /**
+     * Their AtSign
+     */
+    public JTextField atTheirs;
+     /**
+     * They Key for each user
+     */
+    public JTextField key;
     JLabel atMELabel = new JLabel("Your Atsign");
     JLabel atTheirLabel = new JLabel("Sender AtSign");
     JLabel atKey = new JLabel();
@@ -19,7 +53,7 @@ public class LaunchPage implements ActionListener {
          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          frame.setSize(1000, 1000);
          frame.setTitle("Camera Stream");
-         //frame.setLayout(null);
+ 
     
          sButton.setBounds(100, 650, 120, 50); 
          sButton.addActionListener(this);
@@ -41,7 +75,9 @@ public class LaunchPage implements ActionListener {
    
    atTheirLabel = new JLabel("Their AtSign");
    atTheirLabel.setBounds(20, 490, 200, 90);
-   
+   /**
+    * ATSIGN OF PROGRAM USER
+    */
    atMe = new JTextField();
    atMe.setBounds(100, 500, 125, 20);
    
@@ -76,12 +112,16 @@ public class LaunchPage implements ActionListener {
      }
   
      @Override   
+     /**
+      * The method takes the ATSigns + key strings as parameters for which ever action chose.
+      * Once a button is clicked, the program also determines if the public key option is checked.
+      */
      public void actionPerformed(ActionEvent e) {
          String  myAt = atMe.getText();
          String theirAt = atTheirs.getText();
          String newKey = key.getText();
          
-         if (e.getSource()==sButton) {
+         if (e.getSource()==sButton) { // 
   
              if(checkbox.isSelected() == true ){
              
@@ -147,8 +187,12 @@ public class LaunchPage implements ActionListener {
          
   
      }
-     public static void main (String args[]){
-      LaunchPage lp = new LaunchPage();
+     /**
+      * Opens new Launch Frame
+      * 
+      */
+     public static void main (String args[]){ 
+      LaunchPage lp = new LaunchPage(); // begin the program!
      }
   }
   
